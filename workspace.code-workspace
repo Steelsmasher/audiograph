@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.detectIndentation": false,
+		"editor.insertSpaces": false,
+		"python.analysis.extraPaths": [
+			"./server"
+		],
+		"python.pythonPath": "server\\env\\Scripts\\python.exe"
+	}
+}
