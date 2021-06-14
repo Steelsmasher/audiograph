@@ -6,6 +6,7 @@ from datetime import datetime
 from fastapi import FastAPI, Query, WebSocket
 import sys
 import logging
+from websockets.exceptions import ConnectionClosedError
 from logging.handlers import RotatingFileHandler
 
 from lib import *
@@ -354,11 +355,15 @@ async def getTasks():
 @app.websocket('/tasks')
 async def streamTasks(websocket: WebSocket):
 	await websocket.accept()
-	while(True):
-		data = {}
-		for key in tasks.keys(): data[key] = vars(tasks[key]) # Convert Tasks to dictionary objects
-		await websocket.send_json(data)
-		await asyncio.sleep(0.25) # TODO Make this bidirectional (websocket.receive) and close websocket if response times out
+	try:
+		while True:
+			data = {}
+			for key in tasks.keys(): data[key] = vars(tasks[key]) # Convert Tasks to dictionary objects
+			await websocket.send_json(data)
+			await asyncio.sleep(0.25) # TODO Make this bidirectional (websocket.receive) and close websocket if response times out
+	except ConnectionClosedError as error:
+		logger.debug(f"Client disconnected from tasks websocket with error code: {error.code}")
+		await websocket.close()
 
 @app.post('/cancel-task')
 async def cancelTask(taskName: str = Query(None, alias='task-name')):
