@@ -17,7 +17,8 @@ a = Analysis(['server.py'],
                 'uvicorn.protocols.websockets',
                 'uvicorn.protocols.websockets.auto',
                 'uvicorn.lifespan',
-                'uvicorn.lifespan.on'
+                'uvicorn.lifespan.on',
+				'websockets.legacy.server'
 			],
              hookspath=[],
              runtime_hooks=[],
