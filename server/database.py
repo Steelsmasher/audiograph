@@ -28,7 +28,7 @@ class Batch(): # Enables multiple sql statements in a single transaction
 
 def connect():
 	try:
-		return aiosqlite.connect("userdata/data.db")
+		return aiosqlite.connect(getFilePath("data.db"))
 	except aiosqlite.Error as e:
 		print(e)
 

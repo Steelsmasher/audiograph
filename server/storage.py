@@ -1,7 +1,8 @@
 import os
 import json
+from lib import *
 
-filePath = 'userdata/config.json'
+CONFIG_FILE = getFilePath("config.json")
 
 spotifyUsername: str = None
 spotifyClientID: str = None
@@ -12,8 +13,8 @@ spotifyRefreshToken: str = None
 #lastFMUsername: str = None
 
 def readFromFile():
-	if os.path.isfile(filePath):
-		with open(filePath) as userDataFile:
+	if os.path.isfile(CONFIG_FILE):
+		with open(CONFIG_FILE) as userDataFile:
 			jsonData = json.load(userDataFile)
 			keys = jsonData.keys()
 			global spotifyUsername, spotifyClientID, spotifyClientSecret, spotifyRefreshToken, lastFM_API_Key, lastFMUsername
@@ -26,7 +27,7 @@ def readFromFile():
 	else: writeToFile()
 
 def writeToFile():
-	with open(filePath, 'w') as userDataFile:
+	with open(CONFIG_FILE, 'w') as userDataFile:
 		jsonData = {}
 		if(spotifyUsername is not None): jsonData['spotify-username'] = spotifyUsername
 		if(spotifyClientID is not None): jsonData['spotify-client-id'] = spotifyClientID

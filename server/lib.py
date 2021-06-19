@@ -1,4 +1,19 @@
+import os
 from typing import List
+from appdirs import AppDirs
+import pathlib
+
+APP_NAME = "Audiograph"
+USER_DIR = AppDirs(APP_NAME, "").user_data_dir
+
+def initialiseDirectory():
+	if not os.path.isdir(USER_DIR):
+		os.mkdir(USER_DIR)
+
+def getFilePath(filename:str = None):
+	path = pathlib.Path(USER_DIR).joinpath(pathlib.Path(filename))
+	return str(path.absolute())
+
 
 class Task():
 	STOPPED = 0

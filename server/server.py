@@ -15,8 +15,10 @@ import spotify
 import lastFM
 import listenBrainz
 
+initialiseDirectory()
+
 FORMATTER = logging.Formatter("%(asctime)s - %(levelname)s:\t%(message)s")
-LOG_FILE = "userdata/server.log"
+LOG_FILE = getFilePath("server.log")
 consoleHandler = logging.StreamHandler(sys.stdout)
 fileHandler = RotatingFileHandler(LOG_FILE, maxBytes=2000)
 consoleHandler.setFormatter(FORMATTER)
