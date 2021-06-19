@@ -14,12 +14,12 @@
 AppId={{73E38861-03B5-4A68-98C1-C6872D27EEB4}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
+AppVerName={#MyAppName}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={userpf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir=C:\Users\Tino\Documents\Audiograph\build\dist-files
@@ -39,6 +39,10 @@ Source: "C:\Users\Tino\Documents\Audiograph\build\build-files\server.exe"; DestD
 Source: "C:\Users\Tino\Documents\Audiograph\build\build-files\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
+[Dirs]
+; Creates a folder with the name of the app in the local user directory
+Name: "{localappdata}\{#MyAppName}"
+
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
@@ -46,3 +50,7 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Fil
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[UninstallDelete]
+; Deletes user data folder on uninstallation
+Type: filesandordirs; Name: "{localappdata}\{#MyAppName}"

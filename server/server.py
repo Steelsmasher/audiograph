@@ -6,8 +6,8 @@ from datetime import datetime
 from fastapi import FastAPI, Query, WebSocket
 import sys
 import logging
-from websockets.exceptions import ConnectionClosedError
 from logging.handlers import RotatingFileHandler
+from websockets.exceptions import ConnectionClosedError
 
 from lib import *
 import storage
