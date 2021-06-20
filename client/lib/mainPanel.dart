@@ -40,7 +40,7 @@ class MainPanel extends StatelessWidget{
 									)
 								),
 								InkWell(
-									onTap: () => print("Help Screen"),
+									onTap: (){ Navigator.pushNamed(context, '/help'); },
 									child: Padding(
 										padding: const EdgeInsets.all(10.0),
 										child: Icon(Icons.help, size: 36, color: Colors.white),

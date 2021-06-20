@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'global.dart';
@@ -120,6 +122,14 @@ generateRoutes(RouteSettings settings) {
 		case '/tasks':
 			title = "Tasks";
 			page = TasksPage();
+		break;
+		case '/help':
+			title = "About";
+			page = SizedBox(width: 500,
+				child: Center(
+					child: Text("Made by Tino Magondo\nTinotendaMB@gmail.com", style: TextStyle(fontSize: 32))
+				)
+			);
 		break;
 	}
 
