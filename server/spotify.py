@@ -58,7 +58,6 @@ def initialise(redirectURI):
 
 async def getRecentPlays() -> List[Play]:
 	print('Fetching recent plays from Spotify')
-	#plays: List[Play] = []
 	task.status = 'Requesting plays from Spotify'
 	data = spotifyClient.current_user_recently_played()
 	playHistoryObjects = data['items']
@@ -74,8 +73,6 @@ async def getRecentPlays() -> List[Play]:
 		play = Play(timestamp, artistNames, trackTitle)
 		task.status = f"Importing {play.artistNames[0]} - {play.trackTitle}"
 		await database.insertPlay(timestamp, artistNames, trackTitle)
-		#plays.append(play)
-	#return plays
 
 
 async def runPlugin():
@@ -85,9 +82,7 @@ async def runPlugin():
 	interval = 30
 	
 	while(task.state == Task.RUNNING):
-		#plays = getRecentPlays()
 		await getRecentPlays()
-		#await database.insertPlays(plays)
 		for count in range(interval):
 			task.status = f'Spotify plays will be updated in {interval-count} seconds'
 			if(tasks["spotify"].isRunning()): await asyncio.sleep(1)

@@ -299,24 +299,6 @@ async def getPlays(startDate = '0000-01-01T00:00:00Z', endDate = datetime.utcnow
 		plays.append(play.asDict())
 	return plays
 
-"""
-async def getPlayPeriodCounts(startDate = '0000-01-01T00:00:00Z', endDate = datetime.utcnow().isoformat()[:-3]+'Z', period = "DAY", limit = 100, offset = 0):
-	'''Retrieve the number of plays in each day'''
-	modifier = getStrftimeModifer(period)
-
-	playPeriodCounts = await execute(f'''
-		SELECT
-			date(PLAYS.timestamp, 'localtime') AS timestamp,
-			count(*) AS count
-		FROM {playsTable} PLAYS
-		WHERE PLAYS.timestamp BETWEEN ? AND ?
-		GROUP BY strftime(?, timestamp)
-		ORDER BY timestamp DESC
-		LIMIT ? OFFSET ?
-	''', (startDate, endDate, modifier, limit, offset))
-	return [dict(row) for row in playPeriodCounts] # Converts row objects to dict
-"""
-
 async def getPlayPeriodCounts(artist: Artist = None, track: Track = None, startDate = '0000-01-01T00:00:00Z', endDate = datetime.utcnow().isoformat()[:-3]+'Z', period = "DAY", limit = 100, offset = 0):
 	"""Retrieve the number of plays in a given period"""
 	format = getStrftimeModifer(period)

@@ -1,4 +1,4 @@
-import aiohttp # TODO Use lighter request library
+import aiohttp
 import json
 import ijson
 from datetime import datetime

@@ -46,7 +46,7 @@ async def ping():
 	timestamp = datetime.utcnow().isoformat()[:-3]+'Z'
 	return {"timestamp": timestamp}
 
-@app.get('/play') # TODO Consider changing to '/plays' ALSO Consider versioning the api i.e. '/v1/plays'
+@app.get('/play')
 async def getPlays(
 		startDate: str = '0000-01-01T00:00:00Z',
 		endDate: str = datetime.utcnow().isoformat()[:-3]+'Z',
@@ -59,7 +59,7 @@ async def getPlays(
 	plays = await database.getPlays(startDate, endDate, limit, offset)
 	return plays
 
-@app.get('/track-plays') # TODO Consider nesting this endpoint i.e. '/track/plays'
+@app.get('/track-plays')
 async def getTrackPlays(
 		trackTitle: str, # TODO Sanitise this
 		artistNames: str,
@@ -77,7 +77,7 @@ async def getTrackPlays(
 	logger.debug('Returning plays by track of size: ' + str(len(trackPlays)))
 	return trackPlays
 
-@app.get('/artist-plays') # TODO Consider nesting this endpoint i.e. '/track/plays'
+@app.get('/artist-plays')
 async def getArtistPlays(
 		artistName: str = Query(None, alias="artist-name"), # TODO Sanitise this
 		startDate: str = '0000-01-01T00:00:00Z',
@@ -279,7 +279,7 @@ async def getTrackPlayCounts(
 	playCounts = await database.getTrackPlayCounts(startDate, endDate, limit, offset)
 	return playCounts
 
-@app.put('/play') # TODO Consider GET and POST only for 3rd party compatibility
+@app.put('/play')
 async def insertPlay(
 		artistNames: str,
 		trackTitle: str,
@@ -287,15 +287,6 @@ async def insertPlay(
 	):
 	await database.insertPlay(timestamp, artistNames, trackTitle)
 	return f'Inserted track {artistNames} - {trackTitle} at {timestamp}'
-
-#@app.route('/storePlaysFromListenBrainz', methods=['POST'])
-#async def storePlaysFromListenBrainz():
-#	if('store-plays-from-listenbrainz' in tasks): return "Task already running"
-#	tasks['store-plays-from-listenbrainz'] = Task('store-plays-from-listenbrainz')
-#	task = tasks['store-plays-from-listenbrainz']
-#	username = request.args.get("username")
-#	asyncio.create_task( storePlaysFromListenBrainz(task, username) )
-#	return "Getting plays from Listenbrainz"
 
 @app.get('/track-period-counts')
 async def getTrackPeriodCounts(
@@ -318,35 +309,6 @@ async def getArtistPeriodCounts(
 	logger.debug('Getting artist period counts\n\tStart Date: ' + startDate + '\n\tEnd Date: ' + endDate)
 	artistPeriodCounts = await database.getArtistPeriodCounts(startDate, endDate, period, limit)
 	return artistPeriodCounts
-
-#@app.websocket('/importFromListenBrainz')
-#async def importFromListenBrainz():
-#	filePath = await websocket.receive()
-#	print(f"Importing file: {filePath}")
-#	tracksImported = 0
-#
-#	with open(filePath) as file:
-#		trackCount = file.read().count("track_metadata")
-#		print("There are " + str(trackCount) + " tracks")
-#
-#	with open(filePath) as file:
-#		objects = ijson.items(file, 'item')
-#		for obj in objects:
-#			unixTime = obj['listened_at']
-#			timestamp = datetime.utcfromtimestamp(unixTime).strftime('%Y-%m-%dT%H:%M:%SZ')
-#			artistNames = str(obj['track_metadata']["artist_name"]).split('; ') # Artists from Listenbrainz import are delimited by a semi-colon
-#			trackTitle = obj['track_metadata']["track_name"]
-#			database.insertPlay(timestamp, artistNames, trackTitle)
-#			tracksImported += 1
-#			progress = str(tracksImported*100/(trackCount+1))
-#
-#			message = f'Inserted track {artistNames} - {trackTitle} at {timestamp} on {unixTime}'
-##			status = {
-#				"message": message,
-#				"progress": progress
-#			}
-#			await websocket.send_json(status)
-#			print(f'{progress}\t{message}\r')
 
 @app.get('/tasks')
 async def getTasks():

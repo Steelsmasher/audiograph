@@ -45,8 +45,6 @@ async def importPlays(username):
 					artistNames = str(obj['track_metadata']["artist_name"]).split(', ') # Listenbrainz artists are delimited by a comma
 					trackTitle = obj['track_metadata']["track_name"]
 					await database.insertPlay(timestamp, artistNames, trackTitle)
-					#play = Play(timestamp, artistNames, trackTitle)
-					#await database.realInsert(play)
 					playsImported += 1
 					if(earliestTime > unixTime): earliestTime = unixTime
 					task.status = f"Imported {playsImported} plays. {artistNames[0]} - {trackTitle}"
@@ -60,39 +58,8 @@ async def importPlays(username):
 				print(f'Waiting for {timeRemaining} seconds')
 				await asyncio.sleep(timeRemaining+3)
 
-			#print(f"Imported {playsImported} plays with {requestsRemaining} requests remaining")
 			if playsImported >= totalPlays: break
 
 		task.status = f"ListenBrainz import has stopped. {playsImported} plays were imported."
 		task.setState(Task.STOPPED)
 		print('ListenBrainz import has stopped')
-
-'''
-async def importFromListenBrainz():
-	filePath = await websocket.receive()
-	print(f"Importing file: {filePath}")
-	tracksImported = 0
-
-	with open(filePath) as file:
-		trackCount = file.read().count("track_metadata")
-		print("There are " + str(trackCount) + " tracks")
-
-	with open(filePath) as file:
-		objects = ijson.items(file, 'item')
-		for obj in objects:
-			unixTime = obj['listened_at']
-			timestamp = datetime.utcfromtimestamp(unixTime).strftime('%Y-%m-%dT%H:%M:%SZ')
-			artistNames = str(obj['track_metadata']["artist_name"]).split('; ') # Artists from Listenbrainz import are delimited by a semi-colon
-			trackTitle = obj['track_metadata']["track_name"]
-			database.insertPlay(timestamp, artistNames, trackTitle)
-			tracksImported += 1
-			progress = str(tracksImported*100/(trackCount+1))
-
-			message = f'Inserted track {artistNames} - {trackTitle} at {timestamp} on {unixTime}'
-			status = {
-				"message": message,
-				"progress": progress
-			}
-			await websocket.send_json(status)
-			print(f'{progress}\t{message}\r')
-'''
